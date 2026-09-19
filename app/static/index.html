@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#0F172A">
+  <meta name="description" content="بحساب؛ مدیریت حساب‌های مالی دونفره">
+  <title>بحساب</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">بـ</span><div><strong>بحساب</strong><small id="today-label"></small></div></div>
+      <button class="icon-btn bell" id="notifications-btn" aria-label="اعلان‌های دوستی">♢<span id="badge" class="badge hidden">۰</span></button>
+    </header>
+
+    <main id="main-content">
+      <section class="page active" data-page="friends">
+        <div class="balance-card">
+          <div class="balance-orb"></div>
+          <span>وضعیت حساب دوستان</span>
+          <strong id="net-balance">۰ تومان</strong>
+          <small id="net-caption">همه‌چیز سر حساب است</small>
+        </div>
+        <div class="section-heading">
+          <div><h1>دوستان</h1><p>حساب هر نفر کاملاً جداست</p></div>
+          <button class="primary compact" id="add-friend-btn">＋ افزودن دوست</button>
+        </div>
+        <div id="friends-list" class="stack"></div>
+      </section>
+
+      <section class="page" data-page="personal">
+        <div class="personal-hero">
+          <div><span>هزینه‌های شخصی</span><strong id="expenses-total">۰ تومان</strong><small>مجموع هزینه‌های ثبت‌شده</small></div>
+          <div class="wallet-icon">◫</div>
+        </div>
+        <div class="section-heading">
+          <div><h1>هزینه‌های من</h1><p>فقط برای خودت نمایش داده می‌شود</p></div>
+          <button class="primary compact" id="add-expense-btn">＋ ثبت هزینه</button>
+        </div>
+        <div id="expenses-list" class="stack"></div>
+      </section>
+
+      <section class="page" data-page="profile">
+        <div class="profile-card">
+          <div id="profile-avatar" class="avatar avatar-xl"></div>
+          <h1 id="profile-name">کاربر بحساب</h1>
+          <p id="profile-username">—</p>
+          <div class="profile-stats">
+            <div><strong id="profile-friends">۰</strong><span>دوست</span></div>
+            <i></i>
+            <div><strong id="profile-expenses">۰</strong><span>تومان هزینه</span></div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h2>تنظیمات</h2>
+          <div class="setting-row"><span class="setting-icon">ت</span><div><strong>تاریخ شمسی</strong><small>تقویم رسمی ایران</small></div><span class="state-pill">فعال</span></div>
+          <div class="setting-row"><span class="setting-icon">﷼</span><div><strong>واحد پول</strong><small>نمایش همه مبالغ</small></div><span class="setting-value">تومان</span></div>
+          <div class="setting-row"><span class="setting-icon">◉</span><div><strong>اعلان‌های تلگرام</strong><small>تغییرات مالی و درخواست‌ها</small></div><span class="state-pill">فعال</span></div>
+        </div>
+        <p class="version">بحساب · نسخه ۱.۰</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="منوی اصلی">
+      <button class="nav-item active" data-target="friends"><span>♧</span><b>دوستان</b></button>
+      <button class="nav-item" data-target="personal"><span>◫</span><b>شخصی</b></button>
+      <button class="nav-item" data-target="profile"><span>◎</span><b>پروفایل</b></button>
+    </nav>
+  </div>
+
+  <section id="friend-detail" class="detail-view hidden">
+    <header class="detail-header">
+      <button class="icon-btn" id="detail-back">→</button>
+      <div><h2 id="detail-name"></h2><p id="detail-username"></p></div>
+      <div class="avatar" id="detail-avatar"></div>
+    </header>
+    <div id="detail-balance" class="detail-balance"></div>
+    <div class="action-grid">
+      <button data-transaction="debt"><span class="action-red">↙</span><b>ثبت بدهی</b></button>
+      <button data-transaction="payment"><span class="action-teal">↗</span><b>ثبت پرداخت</b></button>
+      <button data-transaction="settlement"><span class="action-green">✓</span><b>تسویه حساب</b></button>
+    </div>
+    <div class="timeline-title"><h3>گردش حساب</h3><span>جدیدترین ابتدا</span></div>
+    <div id="transactions-list" class="timeline"></div>
+  </section>
+
+  <dialog id="friend-modal" class="sheet">
+    <form method="dialog" id="friend-form">
+      <div class="sheet-handle"></div><div class="sheet-head"><h2>افزودن دوست</h2><button value="cancel" aria-label="بستن">×</button></div>
+      <p class="form-help">نام کاربری تلگرام دوستت را وارد کن. پس از تأیید او به فهرستت اضافه می‌شود.</p>
+      <label>نام کاربری تلگرام<div class="input-wrap"><span>@</span><input id="friend-username" dir="ltr" placeholder="username" required></div></label>
+      <button class="primary full" type="submit">ارسال درخواست دوستی</button>
+    </form>
+  </dialog>
+
+  <dialog id="requests-modal" class="sheet">
+    <div class="sheet-handle"></div><div class="sheet-head"><h2>درخواست‌های دوستی</h2><button data-close aria-label="بستن">×</button></div>
+    <div id="requests-list" class="stack"></div>
+  </dialog>
+
+  <dialog id="transaction-modal" class="sheet">
+    <form method="dialog" id="transaction-form">
+      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="transaction-title">ثبت تراکنش</h2><button value="cancel">×</button></div>
+      <input type="hidden" id="transaction-id"><input type="hidden" id="transaction-kind">
+      <label id="direction-label">جهت تراکنش<select id="transaction-direction"></select></label>
+      <label id="amount-label">مبلغ (تومان)<input id="transaction-amount" class="money-input" inputmode="numeric" placeholder="مثلاً ۳۵۰٬۰۰۰" required></label>
+      <label>بابت / توضیحات<input id="transaction-description" maxlength="500" placeholder="مثلاً شام"></label>
+      <label>تاریخ<button type="button" class="date-field" id="transaction-date"></button></label>
+      <button class="primary full" type="submit">ثبت و محاسبه مانده</button>
+    </form>
+  </dialog>
+
+  <dialog id="expense-modal" class="sheet">
+    <form method="dialog" id="expense-form">
+      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="expense-title">ثبت هزینه شخصی</h2><button value="cancel">×</button></div>
+      <input type="hidden" id="expense-id">
+      <label>مبلغ (تومان)<input id="expense-amount" class="money-input" inputmode="numeric" placeholder="مثلاً ۲۵۰٬۰۰۰" required></label>
+      <label>توضیحات<input id="expense-description" maxlength="500" placeholder="مثلاً خرید روزانه" required></label>
+      <label>تاریخ<button type="button" class="date-field" id="expense-date"></button></label>
+      <button class="primary full" type="submit">ذخیره هزینه</button>
+    </form>
+  </dialog>
+
+  <dialog id="calendar-modal" class="calendar-dialog">
+    <div class="calendar-head"><button id="cal-next">‹</button><strong id="cal-title"></strong><button id="cal-prev">›</button></div>
+    <div class="weekdays"><span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span></div>
+    <div id="calendar-grid" class="calendar-grid"></div>
+    <button class="text-btn" id="calendar-today">امروز</button>
+  </dialog>
+
+  <dialog id="confirm-modal" class="confirm-dialog">
+    <div class="confirm-icon">!</div><h2>حذف شود؟</h2><p id="confirm-text">این عملیات قابل بازگشت نیست.</p>
+    <div><button id="confirm-cancel">انصراف</button><button id="confirm-delete" class="danger">حذف</button></div>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+  <div id="loading" class="loading"><div class="loader-logo">بـ</div><span>در حال آماده‌سازی بحساب…</span></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
