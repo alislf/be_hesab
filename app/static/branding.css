@@ -1,0 +1,48 @@
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: block;
+  overflow: hidden;
+  background: var(--navy2);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, .25);
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bell {
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.friend-request-icon {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.loader-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 28px;
+  box-shadow: 0 0 34px rgba(20, 184, 166, .16);
+  animation: bajet-pulse 1.4s infinite;
+}
+
+@keyframes bajet-pulse {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 42px rgba(20, 184, 166, .34);
+  }
+}

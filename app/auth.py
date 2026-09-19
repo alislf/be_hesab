@@ -42,7 +42,7 @@ def validate_init_data(raw: str) -> TelegramIdentity:
         user = json.loads(values["user"])
         return TelegramIdentity(
             id=int(user["id"]),
-            first_name=user.get("first_name") or "کاربر بحساب",
+            first_name=user.get("first_name") or "کاربر باجت",
             last_name=user.get("last_name"),
             username=user.get("username"),
             photo_url=user.get("photo_url"),
@@ -67,4 +67,3 @@ async def telegram_identity(
     if not x_telegram_init_data:
         raise HTTPException(401, "اپ را از داخل تلگرام باز کنید.")
     return validate_init_data(x_telegram_init_data)
-

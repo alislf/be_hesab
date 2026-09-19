@@ -4,16 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#0F172A">
-  <meta name="description" content="بحساب؛ مدیریت حساب‌های مالی دونفره">
-  <title>بحساب</title>
+  <meta name="description" content="باجت؛ مدیریت حساب‌های مالی دونفره">
+  <title>باجت</title>
+  <link rel="icon" href="/static/bajet-logo.jpg">
   <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/branding.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div id="app" class="app-shell">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark">بـ</span><div><strong>بحساب</strong><small id="today-label"></small></div></div>
-      <button class="icon-btn bell" id="notifications-btn" aria-label="اعلان‌های دوستی">♢<span id="badge" class="badge hidden">۰</span></button>
+      <div class="brand"><span class="brand-mark"><img src="/static/bajet-logo.jpg" alt="لوگوی باجت"></span><div><strong>باجت</strong><small id="today-label"></small></div></div>
+      <button class="icon-btn bell" id="notifications-btn" aria-label="درخواست‌های دوستی"><svg class="friend-request-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5.5 20c.7-3.4 3-5.2 6.5-5.2s5.8 1.8 6.5 5.2"></path></svg><span id="badge" class="badge hidden">۰</span></button>
     </header>
 
     <main id="main-content">
@@ -46,7 +48,7 @@
       <section class="page" data-page="profile">
         <div class="profile-card">
           <div id="profile-avatar" class="avatar avatar-xl"></div>
-          <h1 id="profile-name">کاربر بحساب</h1>
+          <h1 id="profile-name">کاربر باجت</h1>
           <p id="profile-username">—</p>
           <div class="profile-stats">
             <div><strong id="profile-friends">۰</strong><span>دوست</span></div>
@@ -60,7 +62,7 @@
           <div class="setting-row"><span class="setting-icon">﷼</span><div><strong>واحد پول</strong><small>نمایش همه مبالغ</small></div><span class="setting-value">تومان</span></div>
           <div class="setting-row"><span class="setting-icon">◉</span><div><strong>اعلان‌های تلگرام</strong><small>تغییرات مالی و درخواست‌ها</small></div><span class="state-pill">فعال</span></div>
         </div>
-        <p class="version">بحساب · نسخه ۱.۰</p>
+        <p class="version">باجت · نسخه ۱.۰</p>
       </section>
     </main>
 
@@ -89,7 +91,7 @@
 
   <dialog id="friend-modal" class="sheet">
     <form method="dialog" id="friend-form">
-      <div class="sheet-handle"></div><div class="sheet-head"><h2>افزودن دوست</h2><button value="cancel" aria-label="بستن">×</button></div>
+      <div class="sheet-handle"></div><div class="sheet-head"><h2>افزودن دوست</h2><button type="button" data-close="friend-modal" aria-label="بستن">×</button></div>
       <p class="form-help">نام کاربری تلگرام دوستت را وارد کن. پس از تأیید او به فهرستت اضافه می‌شود.</p>
       <label>نام کاربری تلگرام<div class="input-wrap"><span>@</span><input id="friend-username" dir="ltr" placeholder="username" required></div></label>
       <button class="primary full" type="submit">ارسال درخواست دوستی</button>
@@ -97,13 +99,13 @@
   </dialog>
 
   <dialog id="requests-modal" class="sheet">
-    <div class="sheet-handle"></div><div class="sheet-head"><h2>درخواست‌های دوستی</h2><button data-close aria-label="بستن">×</button></div>
+    <div class="sheet-handle"></div><div class="sheet-head"><h2>درخواست‌های دوستی</h2><button type="button" data-close="requests-modal" aria-label="بستن">×</button></div>
     <div id="requests-list" class="stack"></div>
   </dialog>
 
   <dialog id="transaction-modal" class="sheet">
     <form method="dialog" id="transaction-form">
-      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="transaction-title">ثبت تراکنش</h2><button value="cancel">×</button></div>
+      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="transaction-title">ثبت تراکنش</h2><button type="button" data-close="transaction-modal" aria-label="بستن">×</button></div>
       <input type="hidden" id="transaction-id"><input type="hidden" id="transaction-kind">
       <label id="direction-label">جهت تراکنش<select id="transaction-direction"></select></label>
       <label id="amount-label">مبلغ (تومان)<input id="transaction-amount" class="money-input" inputmode="numeric" placeholder="مثلاً ۳۵۰٬۰۰۰" required></label>
@@ -115,7 +117,7 @@
 
   <dialog id="expense-modal" class="sheet">
     <form method="dialog" id="expense-form">
-      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="expense-title">ثبت هزینه شخصی</h2><button value="cancel">×</button></div>
+      <div class="sheet-handle"></div><div class="sheet-head"><h2 id="expense-title">ثبت هزینه شخصی</h2><button type="button" data-close="expense-modal" aria-label="بستن">×</button></div>
       <input type="hidden" id="expense-id">
       <label>مبلغ (تومان)<input id="expense-amount" class="money-input" inputmode="numeric" placeholder="مثلاً ۲۵۰٬۰۰۰" required></label>
       <label>توضیحات<input id="expense-description" maxlength="500" placeholder="مثلاً خرید روزانه" required></label>
@@ -137,7 +139,7 @@
   </dialog>
 
   <div id="toast" class="toast"></div>
-  <div id="loading" class="loading"><div class="loader-logo">بـ</div><span>در حال آماده‌سازی بحساب…</span></div>
+  <div id="loading" class="loading"><img class="loader-logo" src="/static/bajet-logo.jpg" alt="لوگوی باجت"><span>در حال آماده‌سازی باجت…</span></div>
   <script src="/static/app.js"></script>
 </body>
 </html>

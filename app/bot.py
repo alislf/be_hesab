@@ -13,7 +13,7 @@ def webhook_secret() -> str:
 def app_button() -> dict:
     return {
         "inline_keyboard": [[{
-            "text": "🚀 ورود به بحساب",
+            "text": "🚀 ورود به باجت",
             "web_app": {"url": os.getenv("APP_URL", "https://example.com")},
         }]]
     }
@@ -50,7 +50,7 @@ async def send_start(chat_id: int, first_name: str) -> bool:
     name = html.escape(first_name)
     return await send_message(
         chat_id,
-        f"سلام {name} 👋\nبه <b>بحساب</b> خوش آمدی. حساب‌های دونفره‌ات را ساده و دقیق مدیریت کن.",
+        f"سلام {name} 👋\nبه <b>باجت</b> خوش آمدی. حساب‌های دونفره‌ات را ساده و دقیق مدیریت کن.",
     )
 
 

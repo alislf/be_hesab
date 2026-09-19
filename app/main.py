@@ -31,7 +31,7 @@ async def lifespan(_: FastAPI):
     await engine.dispose()
 
 
-app = FastAPI(title="بحساب", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="باجت", version="1.0.0", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
@@ -135,7 +135,7 @@ async def index():
 
 @app.get("/health")
 async def health():
-    return {"ok": True, "service": "behesab"}
+    return {"ok": True, "service": "bajet"}
 
 
 @app.get("/api/me")
@@ -193,7 +193,7 @@ async def list_requests(me: User = Depends(current_user), db: AsyncSession = Dep
 async def create_request(payload: FriendRequestCreate, me: User = Depends(current_user), db: AsyncSession = Depends(get_db)):
     target = await db.scalar(select(User).where(func.lower(User.username) == payload.username))
     if not target:
-        raise HTTPException(404, "این نام کاربری هنوز وارد ربات بحساب نشده است.")
+        raise HTTPException(404, "این نام کاربری هنوز وارد ربات باجت نشده است.")
     if target.id == me.id:
         raise HTTPException(400, "نمی‌توانید خودتان را به‌عنوان دوست اضافه کنید.")
     low, high = pair(me.id, target.id)
@@ -370,7 +370,7 @@ async def telegram_webhook(request: Request, x_telegram_bot_api_secret_token: st
     chat = message.get("chat") or {}
     if text.split()[0:1] == ["/start"] and sender.get("id"):
         identity = TelegramIdentity(
-            id=int(sender["id"]), first_name=sender.get("first_name") or "کاربر بحساب",
+            id=int(sender["id"]), first_name=sender.get("first_name") or "کاربر باجت",
             last_name=sender.get("last_name"), username=sender.get("username"),
         )
         async with SessionLocal() as db:

@@ -52,7 +52,7 @@ async function loadAll() {
     renderHeader(); renderFriends(); renderExpenses(); renderProfile();
     $('#loading').classList.add('done');
   } catch(err) {
-    $('#loading').innerHTML=`<div class="offline"><div class="loader-logo">بـ</div><h1>ورود به بحساب انجام نشد</h1><p>${esc(err.message)}</p></div>`;
+    $('#loading').innerHTML=`<div class="offline"><img class="loader-logo" src="/static/bajet-logo.jpg" alt="لوگوی باجت"><h1>ورود به باجت انجام نشد</h1><p>${esc(err.message)}</p></div>`;
   }
 }
 
@@ -153,7 +153,11 @@ function changeMonth(step){let {year,month}=state.calendar;month+=step;if(month<
 $$('.nav-item').forEach(b=>b.onclick=()=>{$$('.nav-item').forEach(x=>x.classList.toggle('active',x===b));$$('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===b.dataset.target))});
 $('#add-friend-btn').onclick=()=>{$('#friend-form').reset();$('#friend-modal').showModal()};
 $('#friend-form').onsubmit=async e=>{e.preventDefault();try{await api('/api/friend-requests',{method:'POST',body:JSON.stringify({username:$('#friend-username').value})});$('#friend-modal').close();toast('درخواست دوستی ارسال شد')}catch(err){toast(err.message,true)}};
-$('#notifications-btn').onclick=loadRequests;$('#requests-modal [data-close]').onclick=()=>$('#requests-modal').close();
+$('#notifications-btn').onclick=loadRequests;
+$$('[data-close]').forEach(button=>button.onclick=()=>{
+  const modal=document.getElementById(button.dataset.close);
+  if (modal?.open) modal.close();
+});
 $('#add-expense-btn').onclick=()=>openExpense();$('#expense-form').onsubmit=submitExpense;$('#transaction-form').onsubmit=submitTransaction;
 $('#detail-back').onclick=()=>{$('#friend-detail').classList.add('hidden');document.body.style.overflow=''};
 $$('[data-transaction]').forEach(b=>b.onclick=()=>openTransaction(b.dataset.transaction));
