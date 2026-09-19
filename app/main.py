@@ -13,7 +13,7 @@ from sqlalchemy import and_, case, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .auth import TelegramIdentity, telegram_identity
-from .bot import money, send_message, send_start, setup_webhook
+from .bot import money, send_message, send_start, setup_webhook, webhook_secret
 from .database import Base, SessionLocal, engine, get_db
 from .models import Friendship, PersonalExpense, Transaction, User, utcnow
 from .schemas import ExpenseCreate, FriendRequestCreate, FriendRequestDecision, TransactionCreate, TransactionUpdate
@@ -360,7 +360,7 @@ async def delete_expense(expense_id: int, me: User = Depends(current_user), db: 
 
 @app.post("/telegram/webhook")
 async def telegram_webhook(request: Request, x_telegram_bot_api_secret_token: str | None = Header(None)):
-    configured_secret = os.getenv("WEBHOOK_SECRET", "")
+    configured_secret = webhook_secret()
     if configured_secret and x_telegram_bot_api_secret_token != configured_secret:
         raise HTTPException(403, "Webhook secret is invalid")
     update = await request.json()

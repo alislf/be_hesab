@@ -1,7 +1,13 @@
 import html
 import os
+import re
 
 import httpx
+
+
+def webhook_secret() -> str:
+    raw = os.getenv("WEBHOOK_SECRET", "").strip()
+    return re.sub(r"[^A-Za-z0-9_-]", "", raw)[:256]
 
 
 def app_button() -> dict:
@@ -14,7 +20,7 @@ def app_button() -> dict:
 
 
 async def telegram_call(method: str, payload: dict) -> bool:
-    token = os.getenv("BOT_TOKEN", "")
+    token = os.getenv("BOT_TOKEN", "").strip()
     if not token:
         return False
     try:
@@ -49,9 +55,9 @@ async def send_start(chat_id: int, first_name: str) -> bool:
 
 
 async def setup_webhook() -> bool:
-    token = os.getenv("BOT_TOKEN", "")
-    app_url = os.getenv("APP_URL", "").rstrip("/")
-    secret = os.getenv("WEBHOOK_SECRET", "")
+    token = os.getenv("BOT_TOKEN", "").strip()
+    app_url = os.getenv("APP_URL", "").strip().rstrip("/")
+    secret = webhook_secret()
     if not token or not app_url or "your-service" in app_url:
         print("Telegram webhook skipped: BOT_TOKEN or APP_URL is missing.", flush=True)
         return False
