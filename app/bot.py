@@ -20,8 +20,14 @@ async def telegram_call(method: str, payload: dict) -> bool:
     try:
         async with httpx.AsyncClient(timeout=12) as client:
             response = await client.post(f"https://api.telegram.org/bot{token}/{method}", json=payload)
-            return response.is_success and response.json().get("ok", False)
-    except (httpx.HTTPError, ValueError):
+            data = response.json()
+            succeeded = response.is_success and data.get("ok", False)
+            if not succeeded:
+                description = data.get("description", "Unknown Telegram API error")
+                print(f"Telegram API {method} failed: HTTP {response.status_code} - {description}", flush=True)
+            return succeeded
+    except (httpx.HTTPError, ValueError) as exc:
+        print(f"Telegram API {method} request error: {type(exc).__name__}", flush=True)
         return False
 
 
@@ -47,7 +53,7 @@ async def setup_webhook() -> bool:
     app_url = os.getenv("APP_URL", "").rstrip("/")
     secret = os.getenv("WEBHOOK_SECRET", "")
     if not token or not app_url or "your-service" in app_url:
-        print("Telegram webhook skipped: BOT_TOKEN or APP_URL is missing.")
+        print("Telegram webhook skipped: BOT_TOKEN or APP_URL is missing.", flush=True)
         return False
     payload = {
         "url": f"{app_url}/telegram/webhook",
@@ -56,7 +62,7 @@ async def setup_webhook() -> bool:
     if secret:
         payload["secret_token"] = secret
     configured = await telegram_call("setWebhook", payload)
-    print(f"Telegram webhook configured: {configured}")
+    print(f"Telegram webhook configured: {configured}", flush=True)
     return configured
 
 
