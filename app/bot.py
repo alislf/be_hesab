@@ -42,19 +42,22 @@ async def send_start(chat_id: int, first_name: str) -> bool:
     )
 
 
-async def setup_webhook() -> None:
+async def setup_webhook() -> bool:
     token = os.getenv("BOT_TOKEN", "")
     app_url = os.getenv("APP_URL", "").rstrip("/")
     secret = os.getenv("WEBHOOK_SECRET", "")
     if not token or not app_url or "your-service" in app_url:
-        return
+        print("Telegram webhook skipped: BOT_TOKEN or APP_URL is missing.")
+        return False
     payload = {
         "url": f"{app_url}/telegram/webhook",
         "allowed_updates": ["message"],
     }
     if secret:
         payload["secret_token"] = secret
-    await telegram_call("setWebhook", payload)
+    configured = await telegram_call("setWebhook", payload)
+    print(f"Telegram webhook configured: {configured}")
+    return configured
 
 
 def money(value: int | float) -> str:

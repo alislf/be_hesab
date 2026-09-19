@@ -26,7 +26,7 @@ STATIC_DIR = Path(__file__).parent / "static"
 async def lifespan(_: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    asyncio.create_task(setup_webhook())
+    await setup_webhook()
     yield
     await engine.dispose()
 
