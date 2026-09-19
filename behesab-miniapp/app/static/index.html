@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#0F172A" />
+  <title>بحساب</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div><div class="brand">بحساب</div><div class="subtitle">حساب‌وکتاب دونفره، ساده و شفاف</div></div>
+      <button class="icon-btn" id="bellBtn" aria-label="درخواست‌ها">🔔<span id="requestBadge" class="badge hidden">0</span></button>
+    </header>
+
+    <main id="viewFriends" class="view active">
+      <section class="hero-card">
+        <span>مانده کل روابط</span><strong id="totalBalance">۰ تومان</strong><small>مثبت یعنی در مجموع طلبکاری</small>
+      </section>
+      <div class="section-head"><h2>دوستان</h2><button class="primary small" id="addFriendBtn">+ افزودن دوست</button></div>
+      <div id="friendsList" class="stack"></div>
+    </main>
+
+    <main id="viewPersonal" class="view">
+      <div class="section-head"><h2>هزینه‌های شخصی</h2><button class="primary small" id="addPersonalBtn">+ ثبت هزینه</button></div>
+      <div id="personalList" class="stack"></div>
+    </main>
+
+    <main id="viewProfile" class="view">
+      <section class="profile-card">
+        <div class="avatar" id="profileAvatar">ب</div>
+        <h2 id="profileName">...</h2>
+        <p id="profileUsername">...</p>
+      </section>
+      <section class="info-card"><span>نام اپ</span><b>بحساب</b></section>
+      <section class="info-card"><span>نسخه</span><b>1.0.0</b></section>
+      <section class="info-card"><span>واحد پول</span><b>تومان</b></section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button data-view="Friends" class="active"><span>👥</span>دوستان</button>
+      <button data-view="Personal"><span>🧾</span>شخصی</button>
+      <button data-view="Profile"><span>👤</span>پروفایل</button>
+    </nav>
+  </div>
+
+  <div id="sheet" class="sheet-backdrop hidden"><div class="sheet"><div class="sheet-handle"></div><div id="sheetContent"></div></div></div>
+  <div id="toast" class="toast hidden"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
